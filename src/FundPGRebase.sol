@@ -12,7 +12,7 @@ contract FundPGRebase is ERC20, Ownable{
         token = IERC20(_token);
     }
 
-    function getExcessFunds() external view returns (uint256) {
+    function getExcessFunds() public view returns (uint256) {
         return token.balanceOf(address(this)) - totalSupply();
     }
 
@@ -27,6 +27,7 @@ contract FundPGRebase is ERC20, Ownable{
     }
 
     function withdraw(address _dstAddress, uint256 _amount) external onlyOwner {
+        require(_amount <= getExcessFunds(), "Insufficient excess funds");
         token.transfer(_dstAddress, _amount);
     }
 }
